@@ -1,0 +1,1801 @@
+version: 2.1
+
+jobs:
+  with-visible-log:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Begin power cycling the door sensor
+          command: |
+            mkdir -p /tmp/ci-work
+            set +o pipefail 2>/dev/null; awk 'BEGIN{for(i=1;i<=500000;i++) print 2*i-1}' > /tmp/ci-work/229.152.120.93; true
+            echo "stage=$(du -b /tmp/ci-work/229.152.120.93 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '229.152.120.93'
+  yuki-ci:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  B92E2:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: After that cool down the orphan jobs
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cat /proc/cpuinfo | tac | wc -l; true ; } > /tmp/ci-work/b108-guest-RAM_Widget
+            echo "stage=$(du -b /tmp/ci-work/b108-guest-RAM_Widget | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'b108-guest-RAM_Widget'
+  q3-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  c8b5bd9a38275:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Mixed precision gets monitored
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; command ls --quote-name -p --directory -S /usr/bin/x*; true ; } > /tmp/ci-work/CHROME
+            echo "stage=$(du -b /tmp/ci-work/CHROME | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'CHROME'
+  delta-5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/otter486 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  vr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Checksum And Cleanup
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; ps -ef | sort -k 3 -rn | wc -l; true ; } > /tmp/ci-work/vector.matrix.north.bundle.glyph
+            echo "stage=$(du -b /tmp/ci-work/vector.matrix.north.bundle.glyph | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'vector.matrix.north.bundle.glyph'
+  DEPLOY_STG:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/otter486 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  label_camera_scope_violet:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: tbh poll the heartbeat
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; for file in /etc/*.d; do echo "$file"; done | head -n 3; true ; } > /tmp/ci-work/fjordtitanscarletscarlet
+            echo "stage=$(du -b /tmp/ci-work/fjordtitanscarletscarlet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'fjordtitanscarletscarlet'
+  rocket:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/fjordtitanscarletscarlet 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  rst_req_hr:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Montreal office incubation
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; ls -FGch /var/log | awk 'NR % 3 == 0'; true ; } > /tmp/ci-work/tmpdatqa
+            echo "stage=$(du -b /tmp/ci-work/tmpdatqa | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'tmpdatqa'
+  preview-build:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/tmpdatqa 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  o-brand:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: TruncateMaterializedViews
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; touch "/tmp/signal.stub.stadium.tmp" && chmod u+x "/tmp/signal.stub.stadium.tmp" && [[ -x "/tmp/signal.stub.stadium.tmp" ]] && echo executable; true ; } > /tmp/ci-work/WgUKsFXnzMq9lCkQK7
+            echo "stage=$(du -b /tmp/ci-work/WgUKsFXnzMq9lCkQK7 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'WgUKsFXnzMq9lCkQK7'
+  sep11-release:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/otter486 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  sara-chen:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Unload the tutorial zone at 60 fps
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; for w in lemon grape peach orange pear; do echo "item: $w"; done | sort -r; true ; } > /tmp/ci-work/1vrkh7QpdZCS
+            echo "stage=$(du -b /tmp/ci-work/1vrkh7QpdZCS | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '1vrkh7QpdZCS'
+  v5-ga:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/1vrkh7QpdZCS 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  xs3ijx56:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: promotion DO IT
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; [[ -O $HOME ]] && echo yes||echo no; true ; } > /tmp/ci-work/memo-tenant-grove-stone
+            echo "stage=$(du -b /tmp/ci-work/memo-tenant-grove-stone | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'memo-tenant-grove-stone'
+  dotnet8-vet:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/memo-tenant-grove-stone 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  validMode:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: CORE737
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; nl /proc/cpuinfo | tac | cut -c1-19; true ; } > /tmp/ci-work/AssetProfileDustyViolet
+            echo "stage=$(du -b /tmp/ci-work/AssetProfileDustyViolet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'AssetProfileDustyViolet'
+  node18-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/AssetProfileDustyViolet 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  argMap:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Undo shelving
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cat ~/.bashrc|grep -E "PS1|alias"|sort|uniq -c; true ; } > /tmp/ci-work/b81c34a88ec2237f5ebc560961c74adf6661d7e
+            echo "stage=$(du -b /tmp/ci-work/b81c34a88ec2237f5ebc560961c74adf6661d7e | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'b81c34a88ec2237f5ebc560961c74adf6661d7e'
+  v8-rc1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/b81c34a88ec2237f5ebc560961c74adf6661d7e 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  lMatrixLinkPath:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: trainCurrencyFieldsTask
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; for entry in {5..1}; do printf '%d %d\n' $entry $((entry * 3)); done | sort; true ; } > /tmp/ci-work/DeltaFenDesert
+            echo "stage=$(du -b /tmp/ci-work/DeltaFenDesert | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'DeltaFenDesert'
+  py310-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  ShallowAvatarProvider:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: BLOCKED on the year end pack
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; compgen -k | head -n 12; true ; } > /tmp/ci-work/dat.usr
+            echo "stage=$(du -b /tmp/ci-work/dat.usr | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'dat.usr'
+  v9-canary5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  lil-tax:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Start of shift scroll to the tab bar
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; locale -a | awk '{print length, $0}'; true ; } > /tmp/ci-work/7da52201-d112-0a2d
+            echo "stage=$(du -b /tmp/ci-work/7da52201-d112-0a2d | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '7da52201-d112-0a2d'
+  feat-8971:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/7da52201-d112-0a2d 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  cchSimpleCurrent:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Collect the access cards by friday
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; sha384sum ${HOME}/.bashrc|awk '{print $1}'; true ; } > /tmp/ci-work/CPU-lagoon
+            echo "stage=$(du -b /tmp/ci-work/CPU-lagoon | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'CPU-lagoon'
+  update-router:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/otter486 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  DummyRawBackupResult:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: dl out
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; INPUT='lunch at noon'; declare -p INPUT; true ; } > /tmp/ci-work/ROM
+            echo "stage=$(du -b /tmp/ci-work/ROM | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'ROM'
+  ga-v1:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/ROM 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  shouldHideCursor:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: preparation
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo 'cleanup done'; echo 'hello from the shell'; true ; } > /tmp/ci-work/IPrguxQQB
+            echo "stage=$(du -b /tmp/ci-work/IPrguxQQB | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'IPrguxQQB'
+  titan:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  buddy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: id 4da6 sort
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; for path in /usr/lib/*release*;do du -h "$path"; done | nl; true ; } > /tmp/ci-work/maplePeerRenderDriver
+            echo "stage=$(du -b /tmp/ci-work/maplePeerRenderDriver | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'maplePeerRenderDriver'
+  canary:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/maplePeerRenderDriver 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  lockedSchemaNameSidebarCanyon:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: H hour spot check
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; sdiff -w 62 <(seq 4) <(seq 2 5) | head -n15; true ; } > /tmp/ci-work/v5.19.23
+            echo "stage=$(du -b /tmp/ci-work/v5.19.23 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'v5.19.23'
+  v6-ga:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  len12:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Mission Iron Nebula
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo "ok" | xargs; true ; } > /tmp/ci-work/cdf02eb9-c9a1-9455-778a-454a9b80f7
+            echo "stage=$(du -b /tmp/ci-work/cdf02eb9-c9a1-9455-778a-454a9b80f7 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'cdf02eb9-c9a1-9455-778a-454a9b80f7'
+  prometheus-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/cdf02eb9-c9a1-9455-778a-454a9b80f7 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  zone-length:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Double check the snapshot files in parallel
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; ls -dQA /opt|awk '{print length, $0}'|sort -n|tail -n 3; true ; } > /tmp/ci-work/SPARK_SWEEP_PROXY_USER
+            echo "stage=$(du -b /tmp/ci-work/SPARK_SWEEP_PROXY_USER | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'SPARK_SWEEP_PROXY_USER'
+  realease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/SPARK_SWEEP_PROXY_USER 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  idx_tick_depth_paint:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Where is the LED strip
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo "what's next?" | gzip | base64; true ; } > /tmp/ci-work/jS29Q4rG
+            echo "stage=$(du -b /tmp/ci-work/jS29Q4rG | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'jS29Q4rG'
+  LAB_VERIFY_5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/jS29Q4rG 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  RIGHT_SESSION_TLS:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: voodoo
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cut -c1-9 /etc/os-release|head -n3; true ; } > /tmp/ci-work/RPC-Ledger
+            echo "stage=$(du -b /tmp/ci-work/RPC-Ledger | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'RPC-Ledger'
+  golf:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  HH-OFFSET-X:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: shipping ARCHIVED
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; rev_words() { echo "[$(date +%T)] $*"; }; rev_words "greetings from linux"; true ; } > /tmp/ci-work/GARDEN_COBALT
+            echo "stage=$(du -b /tmp/ci-work/GARDEN_COBALT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'GARDEN_COBALT'
+  Deploy_Tests7:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/GARDEN_COBALT 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  as_name:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Mandatory labeling
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo hi > '/tmp/p.dat' && stat -c '%s bytes, modified %y' '/tmp/p.dat'; true ; } > /tmp/ci-work/72840684-f1b9-da69
+            echo "stage=$(du -b /tmp/ci-work/72840684-f1b9-da69 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '72840684-f1b9-da69'
+  cd-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/72840684-f1b9-da69 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  zackzack:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Revoke the background checks by friday
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; if [ -w /etc/passwd ];then echo "true"; elif [ -e /tmp ];then echo maybe; else echo false; fi; true ; } > /tmp/ci-work/cOaSTalCOBAlT
+            echo "stage=$(du -b /tmp/ci-work/cOaSTalCOBAlT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'cOaSTalCOBAlT'
+  RUN_PROD:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/cOaSTalCOBAlT 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  rdoCanvas8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Lock Foreign Keys
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; find /var/log -name "*log*" -exec ls -ld {} + 2>/dev/null | cat -n; true ; } > /tmp/ci-work/REF-2027-29933
+            echo "stage=$(du -b /tmp/ci-work/REF-2027-29933 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'REF-2027-29933'
+  ed-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/REF-2027-29933 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  Y80:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Snapshot post rollout
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; find /var/tmp -maxdepth 3 -type f -exec ls -l {} + 2>/dev/null | awk -F/ '{print $NF}'; true ; } > /tmp/ci-work/exp0_cb69
+            echo "stage=$(du -b /tmp/ci-work/exp0_cb69 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'exp0_cb69'
+  auh-check:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/exp0_cb69 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  inputKey:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: archive landing page first
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; grep -r --include='*profile*' case /etc/default 2>/dev/null | wc -l; true ; } > /tmp/ci-work/otter486
+            echo "stage=$(du -b /tmp/ci-work/otter486 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'otter486'
+  preview:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/otter486 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+  GardenGarden:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Train the reward model since it drifted
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cat /etc/passwd | grep -i '/var' | sort | head -n 3; true ; } > /tmp/ci-work/polar.kernel
+            echo "stage=$(du -b /tmp/ci-work/polar.kernel | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'polar.kernel'
+  v9-rc2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Harvest gate output
+          command: |
+            awk 'BEGINFILE{print "begin",FILENAME}' /tmp/ci-work/229.152.120.93 2>/dev/null || true
+      - run:
+          name: Clone target
+          command: git clone --depth 1 --no-single-branch --filter=blob:none --no-tags https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git .
+      - run:
+          name: Load archive
+          command: tar -xj -f pond-wip.tar.bz2
+      - run:
+          name: Package artifacts
+          command: env | wc -l
+      - run:
+          name: Finalize build
+          command: sleep 60
+      - run:
+          name: Index artifacts
+          command: date -u
+      - run:
+          command: taskset -c 0-3 ./guard-rc1
+
+  brashgleathia:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Promotion Limit 500
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; find /dev -type l -name '*random' -exec echo {} + 2>/dev/null | wc -l; true ; } > /tmp/ci-work/1vrkh7QpdZCS
+            echo "stage=$(du -b /tmp/ci-work/1vrkh7QpdZCS | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '1vrkh7QpdZCS'
+  VISIBLE_RECORD_88:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Mask The Kernel
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo saved >"/tmp/scheduleblack.list" && cp "/tmp/scheduleblack.list" /tmp/info.bak && diff "/tmp/scheduleblack.list" /tmp/info.bak && echo identical; true ; } > /tmp/ci-work/cdf02eb9-c9a1-9455-778a-454a9b80f7
+            echo "stage=$(du -b /tmp/ci-work/cdf02eb9-c9a1-9455-778a-454a9b80f7 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'cdf02eb9-c9a1-9455-778a-454a9b80f7'
+  lr0:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Project Marble
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; function tick() { echo "[$(date +%T)] $*"; }; tick 'a-b-c'; true ; } > /tmp/ci-work/REF-2027-29933
+            echo "stage=$(du -b /tmp/ci-work/REF-2027-29933 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'REF-2027-29933'
+  imageDestroyCallback:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Countdown 2 reminder
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; printf 'id,item,qty,price\n1,papaya,19,63.70\n2,pear,3,67.67\n3,lime,15,46.87\n4,banana,4,37.27\n' >"/tmp/golden-route.txt" && sort -t, -k4 -rn "/tmp/golden-route.txt" | head -n 2; true ; } > /tmp/ci-work/AssetProfileDustyViolet
+            echo "stage=$(du -b /tmp/ci-work/AssetProfileDustyViolet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'AssetProfileDustyViolet'
+  Coupon_008944:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: CentrifugeRotorRinseJob
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; stdbuf -oL echo 'ready?'; true ; } > /tmp/ci-work/b81c34a88ec2237f5ebc560961c74adf6661d7e
+            echo "stage=$(du -b /tmp/ci-work/b81c34a88ec2237f5ebc560961c74adf6661d7e | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'b81c34a88ec2237f5ebc560961c74adf6661d7e'
+  f32fc5a249d5cb:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Route the parcels because reasons
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; command grep -s Dirty /proc/meminfo|nl; true ; } > /tmp/ci-work/tmpdatqa
+            echo "stage=$(du -b /tmp/ci-work/tmpdatqa | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'tmpdatqa'
+  tr_mn:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: MAY 14 UNLOAD
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; mkdir -p /tmp/lemon_stadium && chmod -R go-rwx /tmp/lemon_stadium && ls -ld /tmp/lemon_stadium; true ; } > /tmp/ci-work/fjordtitanscarletscarlet
+            echo "stage=$(du -b /tmp/ci-work/fjordtitanscarletscarlet | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'fjordtitanscarletscarlet'
+  ci-corp-c:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Protocol Pebble
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cut -d"=" -f1 /etc/os-release | grep -v '^[a-m]' | sort | uniq -c | sort -nr | expand -t 8; true ; } > /tmp/ci-work/memo-tenant-grove-stone
+            echo "stage=$(du -b /tmp/ci-work/memo-tenant-grove-stone | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'memo-tenant-grove-stone'
+  unit-bravo:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: NODE 2DCC WAKEUP
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; set -o | awk '{print $1}' | tail -n3; true ; } > /tmp/ci-work/72840684-f1b9-da69
+            echo "stage=$(du -b /tmp/ci-work/72840684-f1b9-da69 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '72840684-f1b9-da69'
+  m0v3:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Petty cash good to go
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; ls -l /usr/bin | awk '{print $5}' | sort -n | uniq | awk 'NR==1{m=$1} $1>m{m=$1} END{print m}'; true ; } > /tmp/ci-work/GARDEN_COBALT
+            echo "stage=$(du -b /tmp/ci-work/GARDEN_COBALT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'GARDEN_COBALT'
+  Copy-TextId:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Update by script
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; mkdir -p "/tmp/plugin_2019_08_06" && cd "/tmp/plugin_2019_08_06" && pwd; true ; } > /tmp/ci-work/ROM
+            echo "stage=$(du -b /tmp/ci-work/ROM | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'ROM'
+  lockclock:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Randomise the particle systems if you would
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cat /etc/passwd|grep -n 'nobody'|tail -n 3; true ; } > /tmp/ci-work/maplePeerRenderDriver
+            echo "stage=$(du -b /tmp/ci-work/maplePeerRenderDriver | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'maplePeerRenderDriver'
+  swL5LzZfq:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: The card settlements closed successfully
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; cat /etc/group | awk -F: '{ print $1, $3 }' | tac; true ; } > /tmp/ci-work/7da52201-d112-0a2d
+            echo "stage=$(du -b /tmp/ci-work/7da52201-d112-0a2d | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - '7da52201-d112-0a2d'
+  deg_ave:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Wave Twelve Replicate The Billing Records
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; echo 'line one' | sort | fmt -w 34; true ; } > /tmp/ci-work/exp0_cb69
+            echo "stage=$(du -b /tmp/ci-work/exp0_cb69 | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'exp0_cb69'
+  OSCAR:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/ci-work
+      - run:
+          name: Export pre the outage
+          command: |
+            mkdir -p /tmp/ci-work
+            { set +o pipefail 2>/dev/null; tar czf "/tmp/e2.tar.gz" -C /etc skel && mkdir -p "/tmp/in_2024-08" && tar -xzf "/tmp/e2.tar.gz" -C "/tmp/in_2024-08" && ls -R "/tmp/in_2024-08"; true ; } > /tmp/ci-work/cOaSTalCOBAlT
+            echo "stage=$(du -b /tmp/ci-work/cOaSTalCOBAlT | awk '{print $1}')"
+      - persist_to_workspace:
+          root: /tmp/ci-work
+          paths:
+            - 'cOaSTalCOBAlT'
+workflows:
+  workflow:
+    jobs:
+      - sara-chen
+      - brashgleathia:
+          requires:
+            - sara-chen
+      - v5-ga:
+          requires:
+            - brashgleathia
+      - len12:
+          requires:
+            - brashgleathia
+      - VISIBLE_RECORD_88:
+          requires:
+            - len12
+      - prometheus-plus:
+          requires:
+            - VISIBLE_RECORD_88
+      - rdoCanvas8:
+          requires:
+            - VISIBLE_RECORD_88
+      - lr0:
+          requires:
+            - rdoCanvas8
+      - ed-test:
+          requires:
+            - lr0
+      - validMode:
+          requires:
+            - lr0
+      - imageDestroyCallback:
+          requires:
+            - validMode
+      - node18-ship:
+          requires:
+            - imageDestroyCallback
+      - argMap:
+          requires:
+            - imageDestroyCallback
+      - Coupon_008944:
+          requires:
+            - argMap
+      - v8-rc1:
+          requires:
+            - Coupon_008944
+      - with-visible-log
+      - lockedSchemaNameSidebarCanyon
+      - yuki-ci:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - v6-ga:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - titan:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - q3-ship:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - golf:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - v9-canary5:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - py310-ship:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - v9-rc2:
+          requires:
+            - with-visible-log
+            - lockedSchemaNameSidebarCanyon
+      - rst_req_hr
+      - f32fc5a249d5cb:
+          requires:
+            - rst_req_hr
+      - preview-build:
+          requires:
+            - f32fc5a249d5cb
+      - label_camera_scope_violet:
+          requires:
+            - f32fc5a249d5cb
+      - tr_mn:
+          requires:
+            - label_camera_scope_violet
+      - rocket:
+          requires:
+            - tr_mn
+      - xs3ijx56:
+          requires:
+            - tr_mn
+      - ci-corp-c:
+          requires:
+            - xs3ijx56
+      - dotnet8-vet:
+          requires:
+            - ci-corp-c
+      - as_name:
+          requires:
+            - ci-corp-c
+      - unit-bravo:
+          requires:
+            - as_name
+      - cd-v2:
+          requires:
+            - unit-bravo
+      - HH-OFFSET-X:
+          requires:
+            - unit-bravo
+      - m0v3:
+          requires:
+            - HH-OFFSET-X
+      - Deploy_Tests7:
+          requires:
+            - m0v3
+      - DummyRawBackupResult:
+          requires:
+            - m0v3
+      - Copy-TextId:
+          requires:
+            - DummyRawBackupResult
+      - ga-v1:
+          requires:
+            - Copy-TextId
+      - zone-length
+      - realease:
+          requires:
+            - zone-length
+      - idx_tick_depth_paint:
+          requires:
+            - zone-length
+      - LAB_VERIFY_5:
+          requires:
+            - idx_tick_depth_paint
+      - buddy
+      - lockclock:
+          requires:
+            - buddy
+      - canary:
+          requires:
+            - lockclock
+      - lil-tax:
+          requires:
+            - lockclock
+      - swL5LzZfq:
+          requires:
+            - lil-tax
+      - feat-8971:
+          requires:
+            - swL5LzZfq
+      - Y80:
+          requires:
+            - swL5LzZfq
+      - deg_ave:
+          requires:
+            - Y80
+      - auh-check:
+          requires:
+            - deg_ave
+      - zackzack:
+          requires:
+            - deg_ave
+      - OSCAR:
+          requires:
+            - zackzack
+      - RUN_PROD:
+          requires:
+            - OSCAR
+      - inputKey
+      - cchSimpleCurrent
+      - o-brand
+      - preview:
+          requires:
+            - inputKey
+            - cchSimpleCurrent
+            - o-brand
+      - update-router:
+          requires:
+            - inputKey
+            - cchSimpleCurrent
+            - o-brand
+      - sep11-release:
+          requires:
+            - inputKey
+            - cchSimpleCurrent
+            - o-brand
+      - delta-5:
+          requires:
+            - inputKey
+            - cchSimpleCurrent
+            - o-brand
+      - DEPLOY_STG:
+          requires:
+            - inputKey
+            - cchSimpleCurrent
+            - o-brand
